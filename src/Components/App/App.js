@@ -6,7 +6,7 @@ import React,  {createContext, useState, useEffect} from "react"
 
 
 const client = new ApolloClient({
-  uri: 'https://rossainc.com/graphql',
+  uri: 'http://jmlflaw.local/graphql',
   cache: new InMemoryCache()
 })
 
@@ -14,10 +14,17 @@ export const Store = createContext()
 
 
 function App () {
+  let params = window.location.pathname.split('/')[1];
+  const [Idioma, setIdioma] = useState('EN')
  const [search, setSearch] = useState("")
  const [activeCategory, setActiveCategory] = useState("All")
  const [posts, setPosts] = useState(null)
+
+  
+
  useEffect(() => {
+  params === "es" ? setIdioma('es') : setIdioma('en')
+  params === "es" ? setActiveCategory('Todo') : setActiveCategory('All')
  if(search === ""){
 
   if(!posts ){
@@ -37,6 +44,8 @@ console.log(search, activeCategory, posts);
         setActiveCategory,
         posts,
         setPosts,
+        Idioma,
+        setIdioma,
       }}>
       
       <SearchBar />

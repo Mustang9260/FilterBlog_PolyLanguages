@@ -6,23 +6,28 @@ import { Store } from '../App/App';
 const CATEGORIES = gql`
 query Categories {
     categories {
-      nodes {
-        categoryId
-        name
+        nodes {
+          categoryId
+          name
+          language {
+            slug
+          }
+        }
       }
-    }
   }
   `
 export default function Categories() {
     const store = useContext(Store)
     const { loading, error, data } = useQuery(CATEGORIES)
+    console.log(data)
     return (
         <div id="filterCategory" className="">               
             <ButtonGroup>
                 {
                     !loading
                         ? data.categories.nodes.filter((j) => j.categoryId !== 1).map((x, i) => {
-                            return (
+                          if(  x.language.slug === store.Idioma ){
+                           return (
                                 <Button
                                     key={i}
                                     color="primary"
@@ -39,7 +44,7 @@ export default function Categories() {
                                         x.name
                                     }
                                 </Button>
-                            )
+                            )}
                         }) : error
 
 

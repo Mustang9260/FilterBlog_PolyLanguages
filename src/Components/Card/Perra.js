@@ -9,13 +9,12 @@ import { Player, Controls } from "@lottiefiles/react-lottie-player";
 
 const GETPOSTBYCATEGORY = gql`
 query getPostByCategory($categoryName: String!) {
-    posts(where: {categoryName: $categoryName}) {
+    posts(first: 9, where: {categoryName: $categoryName}) {
       edges {
         node {
           title
           postId
           link
-          excerpt
           date
           featuredImage {
             node {
@@ -23,6 +22,12 @@ query getPostByCategory($categoryName: String!) {
             }
           }
         }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
       }
     }
   }
@@ -34,6 +39,7 @@ export default function Perra() {
     
     const { loading, error, data:categoryData } = useQuery(GETPOSTBYCATEGORY, {fetchPolicy:"network-only", variables: { categoryName: store.activeCategory } })
     
+
     useEffect(() => {
         if(store.posts){
             setData(store.posts)
